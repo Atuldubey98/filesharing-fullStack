@@ -3,9 +3,12 @@ dotenv.config();
 const http = require("http");
 const app = require("./app");
 const port = process.env.PORT || 5000;
-const { Server } = require("socket.io");
 const server = http.createServer(app);
-const io = new Server(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 const userHandler = require("./api/sockets/userHandler");
 io.on("connection", (socket) => {
   console.log("Clients count on Server " + io.engine.clientsCount);
